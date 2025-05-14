@@ -1011,7 +1011,7 @@ MonoBehaviour:
   m_Camera: {fileID: 12165219}
   m_OriginBaseGameObject: {fileID: 1613884604}
   m_CameraFloorOffsetObject: {fileID: 1903551678}
-  m_RequestedTrackingOriginMode: 0
+  m_RequestedTrackingOriginMode: 1
   m_CameraYOffset: 1.1176
 --- !u!4 &1613884607
 Transform:
@@ -1420,7 +1420,7 @@ Transform:
   m_GameObject: {fileID: 2292215441841500741}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00346428, y: 0.66586643, z: -0.0027423815, w: 0.7460579}
-  m_LocalPosition: {x: 1.257, y: -0.04, z: 3.725}
+  m_LocalPosition: {x: 1.257, y: -64.2, z: 3.725}
   m_LocalScale: {x: 2.5936806, y: 2.5936806, z: 2.5936806}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1445,6 +1445,9 @@ GameObject:
   - component: {fileID: 1478382857059625215}
   - component: {fileID: 2534293992227465050}
   - component: {fileID: 346611954670834576}
+  - component: {fileID: 2534293992227465053}
+  - component: {fileID: 2534293992227465052}
+  - component: {fileID: 2534293992227465051}
   m_Layer: 0
   m_Name: Boule2Bowling
   m_TagString: Untagged
@@ -1460,6 +1463,71 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2292215441841500741}
   m_Mesh: {fileID: 9009401011207473426, guid: ce58602a894da6e4b825db61895b2cf7, type: 3}
+--- !u!114 &2534293992227465051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2292215441841500741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44a92f2a1c1074a4eba94a462a8eaff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballPrefab: {fileID: 2292215441841500741}
+  spawnPoint: {fileID: 12165214}
+  throwForce: 5
+--- !u!136 &2534293992227465052
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2292215441841500741}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3899203
+  m_Height: 0.7711049
+  m_Direction: 1
+  m_Center: {x: -0.0000000730257, y: -0.000000029933386, z: -0.45033622}
+--- !u!54 &2534293992227465053
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2292215441841500741}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2813632632124919660
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,7 +1609,6 @@ MeshRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1900725049}
   - {fileID: 1900725528}
   - {fileID: 1600812349}
   - {fileID: 2036971401}
