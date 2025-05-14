@@ -39,7 +39,7 @@ public class PlaneFilter : MonoBehaviour
         float dotUp = Vector3.Dot(normal, Vector3.up) ;
         float yPos = plane.transform.position.y ;
 
-        bool isFloor = dotUp > normalThreshold && yPos > minFloorHeight ;
+        bool isFloor = dotUp > normalThreshold && yPos < minFloorHeight ;
         bool isWall = Mathf.Abs(dotUp) < (1.0f - normalThreshold) ;
         
         if (isFloor || isWall){

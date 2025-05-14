@@ -379,7 +379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &782628376
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1056,7 +1056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planeManager: {fileID: 0}
-  maxFloorHeight: 0.5
+  minFloorHeight: 1
   normalThreshold: 0.9
 --- !u!1 &1789659181
 GameObject:
@@ -1613,12 +1613,10 @@ SceneRoots:
   - {fileID: 1600812349}
   - {fileID: 2036971401}
   - {fileID: 1613884607}
-<<<<<<< HEAD
   - {fileID: 1072306190}
   - {fileID: 882003997}
   - {fileID: 1789659183}
   - {fileID: 782628382}
-=======
   - {fileID: 1478382857059625215}
   - {fileID: 3190755617412257238}
->>>>>>> 66bbebb8d59cfdb416f20889ac0387593f979657
+  - {fileID: 1900725049}
