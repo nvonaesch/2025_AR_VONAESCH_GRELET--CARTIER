@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 58df9722e62c41e468ea704910c3418e
+guid: faa6f0942c9892144a121be40cd71663
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: EnsimLogo
+    second: {fileID: 667711179787913464, guid: ce58602a894da6e4b825db61895b2cf7, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
