@@ -37,7 +37,10 @@ public class jeterBoule : MonoBehaviour
         Vector3 direction = new Vector3(swipe.x, swipe.y, 1).normalized;
 
         GameObject ball = Instantiate(ballPrefab, spawnPoint.position, Quaternion.identity);
+        ball.tag = "Ball" ;
         Rigidbody rb = ball.GetComponent<Rigidbody>();
         rb.AddForce(Camera.main.transform.TransformDirection(direction) * throwForce, ForceMode.Impulse);
+
+        Destroy(ball, 3f);
     }
 }
