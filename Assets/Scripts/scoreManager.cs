@@ -12,6 +12,8 @@ public class ScoreManager : MonoBehaviour
 
     void Awake()
     {
+        scoreText.text = "Score: " + score;
+
         if (instance == null)
             instance = this;
         else

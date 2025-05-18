@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class jeterBoule : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class jeterBoule : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
+
+            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                return;
 
             switch (touch.phase)
             {
@@ -36,8 +40,11 @@ public class jeterBoule : MonoBehaviour
         Vector2 swipe = endTouchPos - startTouchPos;
         Vector3 direction = new Vector3(swipe.x, swipe.y, 1).normalized;
 
-        GameObject ball = Instantiate(ballPrefab, spawnPoint.position, Quaternion.identity);
-        ball.tag = "Ball" ;
+        //ajout
+        Vector3 spawnPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
+
+        GameObject ball = Instantiate(ballPrefab, spawnPosition/*spawnPoint.position*/, Quaternion.identity);
+        ball.tag = "Ball";
         Rigidbody rb = ball.GetComponent<Rigidbody>();
         rb.AddForce(Camera.main.transform.TransformDirection(direction) * throwForce, ForceMode.Impulse);
 
