@@ -10,7 +10,7 @@ public class selectionnerPlan : MonoBehaviour
     [SerializeField] private GroundLockManager groundLockManager;
     [SerializeField] private string targetSceneName = "SampleScene";
 
-    public void OnFinalizeButtonClicked()
+    public void SavePlaneAndLoadScene()
     {
         var plane = groundLockManager.GetLockedPlane();
 
@@ -23,6 +23,14 @@ public class selectionnerPlan : MonoBehaviour
         // Sauvegarde des infos essentielles
         PlaneData.PlaneCenter = plane.center;
         PlaneData.PlaneRotation = plane.transform.rotation;
+
+        var meshFilter = plane.GetComponent<MeshFilter>();
+        if (meshFilter != null)
+        {
+            var mesh = meshFilter.mesh;
+            PlaneData.Vertices = mesh.vertices;
+            PlaneData.Triangles = mesh.triangles;
+        }
 
         // Changement de scène
         SceneManager.LoadScene(targetSceneName);
