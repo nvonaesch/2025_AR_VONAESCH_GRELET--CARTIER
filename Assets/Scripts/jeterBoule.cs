@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class jeterBoule : MonoBehaviour
 {
     public GameObject ballPrefab;
-    public float throwForce = 10f;
+    public float throwForce = 3f;
 
     private Vector2 startTouchPos;
     private Vector2 endTouchPos;
@@ -40,16 +40,18 @@ public class jeterBoule : MonoBehaviour
 
     void SpawnBall()
     {
-        // Position devant la caméra en bas de l’écran
-        Vector3 screenBottom = new Vector3(Screen.width / 2, 1.5f, 0.5f);
-        Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(screenBottom);
+        Vector3 touchPosition = new Vector3(startTouchPos.x, startTouchPos.y, 0.5f); 
+        Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(touchPosition);
+
+        spawnPosition.x += 0.05f;
+        spawnPosition.y += 0.05f;
 
         currentBall = Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
         currentBall.tag = "Ball";
 
         currentRb = currentBall.GetComponent<Rigidbody>();
         if (currentRb != null)
-            currentRb.isKinematic = true; // Empêche qu'elle tombe pendant le swipe
+            currentRb.isKinematic = true;
     }
 
     void ThrowBall()
