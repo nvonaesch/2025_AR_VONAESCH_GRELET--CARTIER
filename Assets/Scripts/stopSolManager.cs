@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class GroundLockManager : MonoBehaviour
 {
@@ -57,8 +58,7 @@ public class GroundLockManager : MonoBehaviour
             }
             else
             {
-                plane.GetComponent<MeshRenderer>().enabled = false;
-                plane.enabled = false;
+                plane.gameObject.SetActive(false);
             }
         }
 
@@ -69,35 +69,8 @@ public class GroundLockManager : MonoBehaviour
         if (!cleanupActive)
         {
             cleanupActive = true;
-            //StartCoroutine(CleanupRoutine());
         }
     }
-
-    /*private IEnumerator CleanupRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(cleanupInterval);
-
-            List<ARPlane> toDestroy = new List<ARPlane>();
-
-            foreach (var plane in planeManager.trackables)
-            {
-                if (plane != lowestPlane)
-                {
-                    plane.GetComponent<MeshRenderer>().enabled = false;
-                    plane.enabled = false;
-
-                    toDestroy.Add(plane);
-                }
-            }
-
-            foreach (var plane in toDestroy)
-            {
-                Destroy(plane.gameObject);
-            }
-        }
-    }*/
 
     private void OnPlanesChanged(ARPlanesChangedEventArgs args)
     {
@@ -108,8 +81,7 @@ public class GroundLockManager : MonoBehaviour
         {
             if (addedPlane != lowestPlane)
             {
-                addedPlane.GetComponent<MeshRenderer>().enabled = false;
-                addedPlane.enabled = false;
+                addedPlane.gameObject.SetActive(false);
             }
         }
 
@@ -117,8 +89,7 @@ public class GroundLockManager : MonoBehaviour
         {
             if (changedPlane != lowestPlane)
             {
-                changedPlane.GetComponent<MeshRenderer>().enabled = false;
-                changedPlane.enabled = false;
+                changedPlane.gameObject.SetActive(false);
             }
         }
     }
@@ -133,82 +104,10 @@ public class GroundLockManager : MonoBehaviour
         planeManager.planesChanged -= OnPlanesChanged;
     }
 
+    public ARPlane GetLockedPlane()
+    {
+        return lowestPlane;
+    }
 
 }
-
-
-
-/*
-public class GroundLockManager : MonoBehaviour
-{
-    private ARPlaneManager planeManager;
-    private ARPlane lowestPlane;
-
-
-    private ARPlane FindLowestHorizontalPlane()
-    {
-        ARPlane lowest = null;
-        float lowestY = float.MaxValue;
-
-        foreach (var plane in planeManager.trackables)
-        {
-            if (plane.alignment == PlaneAlignment.HorizontalUp)
-            {
-                float y = plane.center.y;
-                if (y < lowestY)
-                {
-                    lowestY = y;
-                    lowest = plane;
-                }
-            }
-        }
-
-        return lowest;
-    }
-
-    void Awake()
-    {
-        planeManager = GetComponent<ARPlaneManager>();
-    }
-
-    // Appelle cette fonction via un bouton UI ou autre
-    public void LockToLowestGroundPlane()
-    {
-
-        lowestPlane = FindLowestHorizontalPlane();
-
-        if (lowestPlane == null)
-        {
-            Debug.Log("Aucun plan horizontal détecté.");
-            return;
-        }
-
-        foreach (var plane in planeManager.trackables)
-        {
-            if (plane == lowestPlane)
-            {
-                // Garder visible et actif
-                plane.GetComponent<MeshRenderer>().enabled = true;
-                plane.enabled = true;
-            }
-            else
-            {
-                // Cache visuelle
-                plane.GetComponent<MeshRenderer>().enabled = false;
-
-                // Désactive le composant ARPlane pour ne plus le mettre à jour
-                plane.enabled = false;
-
-                Destroy(plane.gameObject);
-            }
-        }
-
-        lowestPlane.gameObject.SetActive(true);
-
-        // Arrêter la détection de nouveaux plans
-        planeManager.requestedDetectionMode = PlaneDetectionMode.None;
-    }
-}
-*/
-
 
