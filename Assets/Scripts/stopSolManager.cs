@@ -104,6 +104,10 @@ public class GroundLockManager : MonoBehaviour
         planeManager.planesChanged -= OnPlanesChanged;
     }
 
+    public ARPlane GetLockedPlane()
+    {
+        return lowestPlane;
+    }
 
 }
 
