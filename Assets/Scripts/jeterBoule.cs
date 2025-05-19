@@ -6,11 +6,13 @@ using UnityEngine.EventSystems;
 public class jeterBoule : MonoBehaviour
 {
     public GameObject ballPrefab;
-    public Transform spawnPoint;
     public float throwForce = 10f;
 
     private Vector2 startTouchPos;
     private Vector2 endTouchPos;
+
+    private GameObject currentBall;
+    private Rigidbody currentRb;
 
     void Update()
     {
@@ -18,13 +20,14 @@ public class jeterBoule : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
-            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
                 return;
 
             switch (touch.phase)
             {
                 case TouchPhase.Began:
                     startTouchPos = touch.position;
+                    SpawnBall();
                     break;
 
                 case TouchPhase.Ended:
@@ -35,19 +38,35 @@ public class jeterBoule : MonoBehaviour
         }
     }
 
+    void SpawnBall()
+    {
+        // Position devant la caméra en bas de l’écran
+        Vector3 screenBottom = new Vector3(Screen.width / 2, 1.5f, 0.5f);
+        Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(screenBottom);
+
+        currentBall = Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
+        currentBall.tag = "Ball";
+
+        currentRb = currentBall.GetComponent<Rigidbody>();
+        if (currentRb != null)
+            currentRb.isKinematic = true; // Empêche qu'elle tombe pendant le swipe
+    }
+
     void ThrowBall()
     {
+        if (currentBall == null || currentRb == null) return;
+
         Vector2 swipe = endTouchPos - startTouchPos;
-        Vector3 direction = new Vector3(swipe.x, swipe.y, 1).normalized;
 
-        //ajout
-        Vector3 spawnPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
+        Vector3 swipeDirection = new Vector3(swipe.x, swipe.y, 0);
+        Vector3 worldDirection = Camera.main.transform.forward + Camera.main.transform.TransformDirection(swipeDirection * 0.01f);
 
-        GameObject ball = Instantiate(ballPrefab, spawnPosition/*spawnPoint.position*/, Quaternion.identity);
-        ball.tag = "Ball";
-        Rigidbody rb = ball.GetComponent<Rigidbody>();
-        rb.AddForce(Camera.main.transform.TransformDirection(direction) * throwForce, ForceMode.Impulse);
+        currentRb.isKinematic = false;
+        currentRb.AddForce(worldDirection.normalized * throwForce, ForceMode.Impulse);
 
-        Destroy(ball, 3f);
+        Destroy(currentBall, 3f);
+
+        currentBall = null;
+        currentRb = null;
     }
 }
