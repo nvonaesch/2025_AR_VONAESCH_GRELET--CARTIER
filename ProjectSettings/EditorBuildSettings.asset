@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 2f821060871e4bd4a94ac9c9509a8dca
   - enabled: 1
+    path: Assets/Scenes/Calibration.unity
+    guid: bcf5c28066a3c4546820dd62a2966d49
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
