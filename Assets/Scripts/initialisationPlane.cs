@@ -22,5 +22,7 @@ public class initialisationPlane : MonoBehaviour
 
         var meshRenderer = newPlane.AddComponent<MeshRenderer>();
         meshRenderer.material = planeMaterial;
+
+        newPlane.AddComponent<BoxCollider>();
     }
 }
