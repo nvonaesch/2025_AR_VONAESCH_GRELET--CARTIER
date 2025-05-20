@@ -33,10 +33,8 @@ public class jeterBoule : MonoBehaviour
                 case TouchPhase.Moved:
                     if (currentBall != null)
                     {
-                        Vector3 touchPosition = new Vector3(touch.position.x, touch.position.y, 0.5f);
+                        Vector3 touchPosition = new Vector3(touch.position.x, touch.position.y, 0.6f);
                         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(touchPosition);
-                        worldPosition.x += 0.05f;
-                        worldPosition.y += 0.05f;
                         currentBall.transform.position = worldPosition;
                     }
                     break;
@@ -53,9 +51,6 @@ public class jeterBoule : MonoBehaviour
     {
         Vector3 touchPosition = new Vector3(startTouchPos.x, startTouchPos.y, 0.5f);
         Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(touchPosition);
-
-        spawnPosition.x += 0.05f;
-        spawnPosition.y += 0.05f;
 
         currentBall = Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
         currentBall.tag = "Ball";
