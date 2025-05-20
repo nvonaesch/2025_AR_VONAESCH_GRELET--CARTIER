@@ -30,6 +30,17 @@ public class jeterBoule : MonoBehaviour
                     SpawnBall();
                     break;
 
+                case TouchPhase.Moved:
+                    if (currentBall != null)
+                    {
+                        Vector3 touchPosition = new Vector3(touch.position.x, touch.position.y, 0.5f);
+                        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(touchPosition);
+                        worldPosition.x += 0.05f;
+                        worldPosition.y += 0.05f;
+                        currentBall.transform.position = worldPosition;
+                    }
+                    break;
+
                 case TouchPhase.Ended:
                     endTouchPos = touch.position;
                     ThrowBall();
@@ -40,7 +51,7 @@ public class jeterBoule : MonoBehaviour
 
     void SpawnBall()
     {
-        Vector3 touchPosition = new Vector3(startTouchPos.x, startTouchPos.y, 0.5f); 
+        Vector3 touchPosition = new Vector3(startTouchPos.x, startTouchPos.y, 0.5f);
         Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(touchPosition);
 
         spawnPosition.x += 0.05f;
