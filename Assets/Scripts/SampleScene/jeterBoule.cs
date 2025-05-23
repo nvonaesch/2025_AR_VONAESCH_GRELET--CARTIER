@@ -86,7 +86,9 @@ public class jeterBoule : MonoBehaviour
 
     void OnDestroy()
     {
-        
+        GameObject partieManager = GameObject.Find("PartieManager");
+        Partie p = partieManager.GetComponent<Partie>();
+        p.MiseAJourJeu();
     }
 
 }

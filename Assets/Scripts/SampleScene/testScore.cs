@@ -9,6 +9,6 @@ public class testScore : MonoBehaviour
     public void ajoutScore()
     {
         int nombreAleatoire = Random.Range(0, 10);
-        partie.MiseAJourJeu(nombreAleatoire);
+        //partie.MiseAJourJeu(nombreAleatoire);
     }
 }

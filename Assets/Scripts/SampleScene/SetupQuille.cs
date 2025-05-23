@@ -14,11 +14,11 @@ public class setupQuille : MonoBehaviour
     private Vector3 centerPosition;
     private float totalDepth;
     private float startZ;
-    private GameObject reconstructedPlane = GameObject.Find("ReconstructedPlane");
+    private GameObject reconstructedPlane;
 
     void Start()
     {
-        
+        reconstructedPlane  = GameObject.Find("ReconstructedPlane");
         centerPosition = reconstructedPlane.transform.position;
 
         Vector3 scorePosition = centerPosition + new Vector3(0f, 1f, 0.4f);
@@ -57,7 +57,7 @@ public class setupQuille : MonoBehaviour
         Quille quilleScript = quille.AddComponent<Quille>();
         quilleScript.numero = quilleCount;
 
-        return quilleCount++;
+        return quilleCount + 1;
     }
 
     public void placerQuilles(List<bool> quillesTombees)
@@ -78,7 +78,11 @@ public class setupQuille : MonoBehaviour
             {
                 if (quillesTombees[quilleCount] == false)
                     quilleCount = placerQuille(startX, i, z, reconstructedPlane, quilleCount);
-                else quilleCount += 1 ; 
+                else
+                {
+                    quillesTombees[quilleCount] = true;
+                    quilleCount += 1;
+                }  
             }
         }
     }

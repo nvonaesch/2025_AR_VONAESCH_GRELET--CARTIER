@@ -24,7 +24,7 @@ public class Partie : MonoBehaviour
 
     private List<bool> quillesTombees = new List<bool>();
 
-    private GameObject quilleManager = GameObject.Find("NomDuGameObject");
+    private GameObject quilleManager;
 
     void Start()
     {
@@ -41,6 +41,7 @@ public class Partie : MonoBehaviour
             jeux.Add(jeu);
             quillesTombees.Add(false);
         }
+        quilleManager = GameObject.Find("NomDuGameObject");
     }
 
     int CalculerScoreJeu(Jeu jeu, int index)
@@ -79,7 +80,8 @@ public class Partie : MonoBehaviour
 
     public void MiseAJourJeu()
     {
-        int nbBoules = quillesTombees.Count(q => q == true);
+        UpdateEtatToutesQuilles();
+        int nbQuilles = quillesTombees.Count(q => q == true);
 
         if (finie == false)
         {
@@ -87,17 +89,17 @@ public class Partie : MonoBehaviour
             switch (indiceLancer)
             {
                 case false:
-                    jeuActuel.lancer1.score = nbBoules;
-                    UpdateTextLancer(indiceJeu * 2, nbBoules);
-                    if (nbBoules == 10)
+                    jeuActuel.lancer1.score = nbQuilles;
+                    UpdateTextLancer(indiceJeu * 2, nbQuilles);
+                    if (nbQuilles == 10)
                     {
                         indiceLancer = !indiceLancer;
                         indiceJeu += 1;
                     }
                     break;
                 case true:
-                    UpdateTextLancer(indiceJeu * 2 + 1, nbBoules);
-                    jeuActuel.lancer2.score = nbBoules;
+                    UpdateTextLancer(indiceJeu * 2 + 1, nbQuilles);
+                    jeuActuel.lancer2.score = nbQuilles;
                     indiceJeu += 1;
                     break;
             }
@@ -107,11 +109,11 @@ public class Partie : MonoBehaviour
                 finie = true;
             }
 
-            UpdateText(nbBoules);
+            UpdateText(nbQuilles);
 
             //replacer les quilles pour le prochain lancer / jeu
-            setupQuille setup = quilleManager.GetComponent<setupQuille>();
-            setup.placerQuilles(quillesTombees);
+            StartCoroutine(ReplacerQuillesApresDestruction());
+
         }
     }
 
@@ -159,5 +161,28 @@ public class Partie : MonoBehaviour
             Quille quille = q.GetComponent<Quille>();
             UpdateEtatQuille(quille.numero, quille.isTombee());
         }
+    }
+
+
+    IEnumerator ReplacerQuillesApresDestruction()
+    {
+        GameObject[] quilles = GameObject.FindGameObjectsWithTag("Quille");
+
+        foreach (GameObject q in quilles)
+        {
+            Destroy(q);
+        }
+
+        yield return new WaitForEndOfFrame(); // attend la suppression effective
+
+        setupQuille setup = quilleManager.GetComponent<setupQuille>();
+        if (indiceLancer == false)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                quillesTombees[i] = false ; 
+            }
+        }
+        setup.placerQuilles(quillesTombees);
     }
 }
