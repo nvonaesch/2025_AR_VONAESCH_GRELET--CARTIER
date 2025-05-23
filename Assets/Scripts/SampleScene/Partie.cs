@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
 using System.Xml.Schema;
+using System;
 
 public class Partie : MonoBehaviour
 {
@@ -20,6 +21,11 @@ public class Partie : MonoBehaviour
     public TextMeshProUGUI textPointsLancer;
 
     public List<TextMeshProUGUI> textsLancers = new List<TextMeshProUGUI>();
+
+    private List<bool> quillesTombees = new List<bool>();
+
+    private GameObject quilleManager = GameObject.Find("NomDuGameObject");
+
     void Start()
     {
         for (int i = 0; i < 10; i++)
@@ -33,6 +39,7 @@ public class Partie : MonoBehaviour
             };
 
             jeux.Add(jeu);
+            quillesTombees.Add(false);
         }
     }
 
@@ -70,8 +77,10 @@ public class Partie : MonoBehaviour
         return scores.Take(nombre).Sum();
     }
 
-    public void MiseAJourJeu(int nbBoules)
+    public void MiseAJourJeu()
     {
+        int nbBoules = quillesTombees.Count(q => q == true);
+
         if (finie == false)
         {
             Jeu jeuActuel = jeux[indiceJeu];
@@ -99,6 +108,10 @@ public class Partie : MonoBehaviour
             }
 
             UpdateText(nbBoules);
+
+            //replacer les quilles pour le prochain lancer / jeu
+            setupQuille setup = quilleManager.GetComponent<setupQuille>();
+            setup.placerQuilles(quillesTombees);
         }
     }
 
@@ -129,6 +142,22 @@ public class Partie : MonoBehaviour
 
     void UpdateTextLancer(int indice, int points)
     {
-        textsLancers[indice].text = points.ToString() ; 
+        textsLancers[indice].text = points.ToString();
+    }
+
+    private void UpdateEtatQuille(int index, bool etat)
+    {
+        quillesTombees[index] = etat;
+    }
+
+    private void UpdateEtatToutesQuilles()
+    {
+        GameObject[] quilles = GameObject.FindGameObjectsWithTag("Quille");
+
+        foreach (GameObject q in quilles)
+        {
+            Quille quille = q.GetComponent<Quille>();
+            UpdateEtatQuille(quille.numero, quille.isTombee());
+        }
     }
 }
