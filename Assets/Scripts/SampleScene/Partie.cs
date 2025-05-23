@@ -4,12 +4,13 @@ using UnityEngine;
 using System.Linq;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
+using System.Xml.Schema;
 
 public class Partie : MonoBehaviour
 {
     public List<Jeu> jeux = new List<Jeu>();
 
-    public int indiceLancer = 0;
+    public bool indiceLancer = false;
     public int indiceJeu = 0;
     public bool finie = false;
 
@@ -25,9 +26,10 @@ public class Partie : MonoBehaviour
         {
             Jeu jeu = new Jeu
             {
-                numero = i + 1,
-                lancer1 = new Lancer(),
-                lancer2 = new Lancer()
+                numero = i,
+                lancer1 = new Lancer(1),
+                lancer2 = new Lancer(2),
+
             };
 
             jeux.Add(jeu);
@@ -40,14 +42,14 @@ public class Partie : MonoBehaviour
 
         if (jeu.strike)
         {
-            return scoreDeBase + GetProchainsLancers(index + 1, 2);
+            jeu.pointsSupplementaires = GetProchainsLancers(index + 1, 2);
         }
         else if (jeu.spare)
         {
-            return scoreDeBase + GetProchainsLancers(index + 1, 1);
+            jeu.pointsSupplementaires = GetProchainsLancers(index + 1, 1);
         }
 
-        return scoreDeBase;
+        return scoreDeBase + jeu.pointsSupplementaires;
     }
 
     int GetProchainsLancers(int startIndex, int nombre)
@@ -61,6 +63,8 @@ public class Partie : MonoBehaviour
                 scores.Add(j.lancer1.score);
             if (j.lancer2 != null && scores.Count < nombre)
                 scores.Add(j.lancer2.score);
+            if (j.strike == true)
+                scores.Add(jeux[i + 1].lancer1.score);
         }
 
         return scores.Take(nombre).Sum();
@@ -68,31 +72,34 @@ public class Partie : MonoBehaviour
 
     public void MiseAJourJeu(int nbBoules)
     {
-        Jeu jeuActuel = jeux[indiceJeu];
-        switch (indiceLancer)
+        if (finie == false)
         {
-            case 0:
-                jeuActuel.lancer1.score = nbBoules;
-                UpdateTextLancer(indiceJeu * 2, nbBoules);
-                if (nbBoules == 10)
-                {
-                    indiceLancer += 1;
+            Jeu jeuActuel = jeux[indiceJeu];
+            switch (indiceLancer)
+            {
+                case false:
+                    jeuActuel.lancer1.score = nbBoules;
+                    UpdateTextLancer(indiceJeu * 2, nbBoules);
+                    if (nbBoules == 10)
+                    {
+                        indiceLancer = !indiceLancer;
+                        indiceJeu += 1;
+                    }
+                    break;
+                case true:
+                    UpdateTextLancer(indiceJeu * 2 + 1, nbBoules);
+                    jeuActuel.lancer2.score = nbBoules;
                     indiceJeu += 1;
-                }
-                break;
-            case 1:
-                UpdateTextLancer(indiceJeu * 2 + 1, nbBoules);
-                jeuActuel.lancer2.score = nbBoules;
-                indiceJeu += 1;
-                break;
-        }
-        indiceLancer = (indiceLancer + 1) % 2;
-        if (indiceJeu == 10)
-        {
-            finie = true;
-        }
+                    break;
+            }
+            indiceLancer = !indiceLancer;
+            if (indiceJeu == 10)
+            {
+                finie = true;
+            }
 
-        UpdateText(nbBoules);
+            UpdateText(nbBoules);
+        }
     }
 
     int CalculerScorePartie()
@@ -111,7 +118,7 @@ public class Partie : MonoBehaviour
         {
             textScore.text = "Score : " + CalculerScorePartie();
             textIndiceJeu.text = "Jeu numéro " + indiceJeu;
-            textIndiceLancer.text = "Lancer numéro " + (indiceLancer + 1);
+            textIndiceLancer.text = "Lancer numéro " + (indiceLancer ? "2" : "1");
             textPointsLancer.text = "Points sur le lancer précédent : " + points;
         }
         else
