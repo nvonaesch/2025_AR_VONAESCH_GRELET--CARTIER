@@ -61,20 +61,27 @@ public class jeterBoule : MonoBehaviour
     }
 
     void ThrowBall()
-    {
-        if (currentBall == null || currentRb == null) return;
+{
+    if (currentBall == null || currentRb == null) return;
 
-        Vector2 swipe = endTouchPos - startTouchPos;
+    Vector2 swipe = endTouchPos - startTouchPos;
 
-        Vector3 swipeDirection = new Vector3(swipe.x, swipe.y, 0);
-        Vector3 worldDirection = Camera.main.transform.forward + Camera.main.transform.TransformDirection(swipeDirection * 0.01f);
+    // Réduire l'impact du swipe horizontal/vertical
+    float swipeX = Mathf.Clamp(swipe.x * 0.001f, -0.5f, 0.5f);  // moins de courbure latérale
+    float swipeY = Mathf.Clamp(swipe.y * 0.002f, 0f, 1f);       // un peu d'effet de "lancer vers le haut"
 
-        currentRb.isKinematic = false;
-        currentRb.AddForce(worldDirection.normalized * throwForce, ForceMode.Impulse);
+    Vector3 direction = Camera.main.transform.forward;
+    direction += Camera.main.transform.right * swipeX;   // Courbure horizontale limitée
+    direction += Camera.main.transform.up * swipeY;      // Lancer vers le haut
 
-        Destroy(currentBall, 3f);
+    currentRb.AddTorque(Vector3.right * 5f, ForceMode.Impulse);
+    currentRb.isKinematic = false;
+    currentRb.AddForce(direction.normalized * throwForce, ForceMode.Impulse);
 
-        currentBall = null;
-        currentRb = null;
-    }
+    Destroy(currentBall, 3f);
+
+    currentBall = null;
+    currentRb = null;
+}
+
 }

@@ -5,12 +5,21 @@ using UnityEngine;
 public class setupQuille : MonoBehaviour
 {
     public GameObject quillePrefab;
+    public GameObject scorePrefab;
     public float spacing = 0.4f; 
 
     void Start()
     {
         GameObject reconstructedPlane = GameObject.Find("ReconstructedPlane");
         Vector3 centerPosition = reconstructedPlane.transform.position;
+
+        Vector3 scorePosition = centerPosition + new Vector3(0f, 1f, 0.4f);
+        GameObject scoreDisplay = Instantiate(scorePrefab, scorePosition, Quaternion.identity, reconstructedPlane.transform);
+
+        Vector3 lookDirection = Camera.main.transform.position - scoreDisplay.transform.position;
+        lookDirection.y = 0; 
+        scoreDisplay.transform.rotation = Quaternion.LookRotation(lookDirection);
+
         int totalRows = 4;
         int quilleCount = 0;
 
