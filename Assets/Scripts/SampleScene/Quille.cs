@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Quille : MonoBehaviour
 {
     public int numero;
-    GameObject reconstructedPlane = GameObject.Find("ReconstructedPlane");
-
     private Vector3 positionInitiale;
     private Quaternion rotationInitiale;
 

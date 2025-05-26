@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class initialisationPlane : MonoBehaviour
 {
 
-    public Material planeMaterial; // Assigne un matériau pour voir le plane
+    public Material planeMaterial; 
     void Start()
     {
         GameObject newPlane = new GameObject("ReconstructedPlane");

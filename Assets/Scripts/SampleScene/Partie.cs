@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using TMPro;
-using UnityEngine.SocialPlatforms.Impl;
-using System.Xml.Schema;
-using System;
 
 public class Partie : MonoBehaviour
 {
@@ -40,7 +36,8 @@ public class Partie : MonoBehaviour
             jeux.Add(jeu);
         }
         quillesTombees = Enumerable.Repeat(false, 10).ToList();
-        quilleManager = GameObject.Find("NomDuGameObject");
+        
+        quilleManager = GameObject.Find("QuilleManager");
     }
 
     int CalculerScoreJeu(Jeu jeu, int index)
@@ -160,22 +157,11 @@ public class Partie : MonoBehaviour
             Quille quille = q.GetComponent<Quille>();
             UpdateEtatQuille(quille.numero, quille.isTombee());
         }
-
-        /*var quillesTriees = quilles
-        .Select(q => q.GetComponent<Quille>())
-        .OrderBy(q => q.numero)
-        .ToList();
-
-        foreach (Quille quille in quillesTriees)
-        {
-            UpdateEtatQuille(quille.numero, quille.isTombee());
-        }*/
     }
 
     void ReplacerQuilles()
     {
         GameObject[] quilles = GameObject.FindGameObjectsWithTag("Quille");
-        quilleManager = GameObject.Find("QuilleManager");
         setupQuille setup = quilleManager.GetComponent<setupQuille>();
 
         if (indiceLancer == false)
