@@ -35,12 +35,11 @@ public class Partie : MonoBehaviour
                 numero = i,
                 lancer1 = new Lancer(1),
                 lancer2 = new Lancer(2),
-
             };
 
             jeux.Add(jeu);
-            quillesTombees.Add(false);
         }
+        quillesTombees = Enumerable.Repeat(false, 10).ToList();
         quilleManager = GameObject.Find("NomDuGameObject");
     }
 
@@ -98,8 +97,8 @@ public class Partie : MonoBehaviour
                     }
                     break;
                 case true:
-                    UpdateTextLancer(indiceJeu * 2 + 1, nbQuilles);
-                    jeuActuel.lancer2.score = nbQuilles;
+                    UpdateTextLancer(indiceJeu * 2 + 1, nbQuilles - jeuActuel.lancer1.score);
+                    jeuActuel.lancer2.score = nbQuilles - jeuActuel.lancer1.score;
                     indiceJeu += 1;
                     break;
             }
@@ -110,9 +109,7 @@ public class Partie : MonoBehaviour
             }
 
             UpdateText(nbQuilles);
-
-            //replacer les quilles pour le prochain lancer / jeu
-            StartCoroutine(ReplacerQuillesApresDestruction());
+            ReplacerQuilles();
 
         }
     }
@@ -150,6 +147,8 @@ public class Partie : MonoBehaviour
     private void UpdateEtatQuille(int index, bool etat)
     {
         quillesTombees[index] = etat;
+        Debug.Log($"Quille {index} tombée : {quillesTombees[index]}");
+
     }
 
     private void UpdateEtatToutesQuilles()
@@ -161,28 +160,29 @@ public class Partie : MonoBehaviour
             Quille quille = q.GetComponent<Quille>();
             UpdateEtatQuille(quille.numero, quille.isTombee());
         }
+
+        /*var quillesTriees = quilles
+        .Select(q => q.GetComponent<Quille>())
+        .OrderBy(q => q.numero)
+        .ToList();
+
+        foreach (Quille quille in quillesTriees)
+        {
+            UpdateEtatQuille(quille.numero, quille.isTombee());
+        }*/
     }
 
-
-    IEnumerator ReplacerQuillesApresDestruction()
+    void ReplacerQuilles()
     {
         GameObject[] quilles = GameObject.FindGameObjectsWithTag("Quille");
-
-        foreach (GameObject q in quilles)
-        {
-            Destroy(q);
-        }
-
-        yield return new WaitForEndOfFrame(); // attend la suppression effective
-
+        quilleManager = GameObject.Find("QuilleManager");
         setupQuille setup = quilleManager.GetComponent<setupQuille>();
+
         if (indiceLancer == false)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                quillesTombees[i] = false ; 
-            }
+            for (int i = 0; i < 10; i++) { quillesTombees[i] = false; }
         }
-        setup.placerQuilles(quillesTombees);
+
+        setup.ChangerActivationToutesQuilles(quillesTombees, quilles);
     }
 }
