@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using TMPro;
-using UnityEngine.SocialPlatforms.Impl;
-using System.Xml.Schema;
 
 public class Partie : MonoBehaviour
 {
@@ -20,6 +17,11 @@ public class Partie : MonoBehaviour
     public TextMeshProUGUI textPointsLancer;
 
     public List<TextMeshProUGUI> textsLancers = new List<TextMeshProUGUI>();
+
+    private List<bool> quillesTombees = new List<bool>();
+
+    private GameObject quilleManager;
+
     void Start()
     {
         for (int i = 0; i < 10; i++)
@@ -29,11 +31,13 @@ public class Partie : MonoBehaviour
                 numero = i,
                 lancer1 = new Lancer(1),
                 lancer2 = new Lancer(2),
-
             };
 
             jeux.Add(jeu);
         }
+        quillesTombees = Enumerable.Repeat(false, 10).ToList();
+        
+        quilleManager = GameObject.Find("QuilleManager");
     }
 
     int CalculerScoreJeu(Jeu jeu, int index)
@@ -70,25 +74,28 @@ public class Partie : MonoBehaviour
         return scores.Take(nombre).Sum();
     }
 
-    public void MiseAJourJeu(int nbBoules)
+    public void MiseAJourJeu()
     {
+        UpdateEtatToutesQuilles();
+        int nbQuilles = quillesTombees.Count(q => q == true);
+
         if (finie == false)
         {
             Jeu jeuActuel = jeux[indiceJeu];
             switch (indiceLancer)
             {
                 case false:
-                    jeuActuel.lancer1.score = nbBoules;
-                    UpdateTextLancer(indiceJeu * 2, nbBoules);
-                    if (nbBoules == 10)
+                    jeuActuel.lancer1.score = nbQuilles;
+                    UpdateTextLancer(indiceJeu * 2, nbQuilles);
+                    if (nbQuilles == 10)
                     {
                         indiceLancer = !indiceLancer;
                         indiceJeu += 1;
                     }
                     break;
                 case true:
-                    UpdateTextLancer(indiceJeu * 2 + 1, nbBoules);
-                    jeuActuel.lancer2.score = nbBoules;
+                    UpdateTextLancer(indiceJeu * 2 + 1, nbQuilles - jeuActuel.lancer1.score);
+                    jeuActuel.lancer2.score = nbQuilles - jeuActuel.lancer1.score;
                     indiceJeu += 1;
                     break;
             }
@@ -98,7 +105,9 @@ public class Partie : MonoBehaviour
                 finie = true;
             }
 
-            UpdateText(nbBoules);
+            UpdateText(nbQuilles);
+            ReplacerQuilles();
+
         }
     }
 
@@ -129,6 +138,37 @@ public class Partie : MonoBehaviour
 
     void UpdateTextLancer(int indice, int points)
     {
-        textsLancers[indice].text = points.ToString() ; 
+        textsLancers[indice].text = points.ToString();
+    }
+
+    private void UpdateEtatQuille(int index, bool etat)
+    {
+        quillesTombees[index] = etat;
+        Debug.Log($"Quille {index} tombée : {quillesTombees[index]}");
+
+    }
+
+    private void UpdateEtatToutesQuilles()
+    {
+        GameObject[] quilles = GameObject.FindGameObjectsWithTag("Quille");
+
+        foreach (GameObject q in quilles)
+        {
+            Quille quille = q.GetComponent<Quille>();
+            UpdateEtatQuille(quille.numero, quille.isTombee());
+        }
+    }
+
+    void ReplacerQuilles()
+    {
+        GameObject[] quilles = GameObject.FindGameObjectsWithTag("Quille");
+        setupQuille setup = quilleManager.GetComponent<setupQuille>();
+
+        if (indiceLancer == false)
+        {
+            for (int i = 0; i < 10; i++) { quillesTombees[i] = false; }
+        }
+
+        setup.ChangerActivationToutesQuilles(quillesTombees, quilles);
     }
 }
