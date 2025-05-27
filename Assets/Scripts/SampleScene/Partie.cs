@@ -21,9 +21,11 @@ public class Partie : MonoBehaviour
     private List<bool> quillesTombees = new List<bool>();
 
     private GameObject quilleManager;
+    private GameObject scoreDisplay;
 
     void Start()
     {
+        scoreDisplay = GameObject.FindWithTag("ScoreDisplay");
         for (int i = 0; i < 10; i++)
         {
             Jeu jeu = new Jeu
@@ -134,6 +136,11 @@ public class Partie : MonoBehaviour
         {
             Debug.LogWarning("TextMesh non assigné");
         }
+    }
+
+    void ScoreAppear()
+    {
+
     }
 
     void UpdateTextLancer(int indice, int points)

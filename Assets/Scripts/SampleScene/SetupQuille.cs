@@ -9,6 +9,7 @@ public class setupQuille : MonoBehaviour
 
     //bidouille
     private Quaternion quilleRotation = Quaternion.Euler(-90f, 0f, 0f);
+    private Quaternion scoreRotation = Quaternion.Euler(0f, -90f, 0f);
     private int totalRows = 4;
     private Vector3 centerPosition;
     private float totalDepth;
@@ -20,13 +21,16 @@ public class setupQuille : MonoBehaviour
         reconstructedPlane = GameObject.Find("ReconstructedPlane");
         centerPosition = reconstructedPlane.transform.position;
 
-        Vector3 scorePosition = centerPosition + new Vector3(0f, 1f, 0.4f);
-        GameObject scoreDisplay = Instantiate(scorePrefab, scorePosition, Quaternion.identity, reconstructedPlane.transform);
+        totalDepth = (totalRows - 1) * spacing;
+        startZ = -totalDepth / 2f;
+        float lastRowZ = startZ + (totalRows - 1) * spacing;
 
-        Vector3 lookDirection = Camera.main.transform.position - scoreDisplay.transform.position;
-        lookDirection.y = 0;
-        scoreDisplay.transform.rotation = Quaternion.LookRotation(lookDirection);
+        float scoreZ = lastRowZ + 2.0f;  
+        Vector3 scorePosition = centerPosition + new Vector3(0f, 1f, scoreZ);
 
+        GameObject scoreDisplay = Instantiate(scorePrefab, scorePosition, scoreRotation, reconstructedPlane.transform);
+        scoreDisplay.name = "ScoreDisplay";
+        
         int numQuille = 0;
 
         totalDepth = (totalRows - 1) * spacing;
