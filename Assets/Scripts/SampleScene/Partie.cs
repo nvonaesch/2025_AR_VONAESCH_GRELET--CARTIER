@@ -21,15 +21,25 @@ public class Partie : MonoBehaviour
     private List<bool> etatQuilles = new List<bool>();
 
     private GameObject quilleManager;
-<<<<<<< HEAD
     private GameObject scoreDisplay;
-=======
     public GameObject video;
->>>>>>> 8876dbf9aa25c6e507b7fb7f92d234ca86e896ed
+
+    void Awake()
+    {
+        Debug.LogWarning("AWAKE appelé sur Partie");
+    }
+
+    void OnEnable()
+    {
+        Debug.LogWarning("ON ENABLE appelé sur Partie");
+    }
 
     void Start()
     {
+
         scoreDisplay = GameObject.FindWithTag("ScoreDisplay");
+
+        Debug.LogWarning("START appelé sur Partie");
         for (int i = 0; i < 10; i++)
         {
             Jeu jeu = new Jeu
@@ -41,6 +51,9 @@ public class Partie : MonoBehaviour
             jeux.Add(jeu);
         }
         etatQuilles = Enumerable.Repeat(false, 10).ToList();
+
+        int size = etatQuilles.Count();
+        Debug.LogWarning($"Taille start : {size}");
 
         quilleManager = GameObject.Find("QuilleManager");
     }
@@ -115,7 +128,7 @@ public class Partie : MonoBehaviour
             UpdateText(score);
             if (nbQuilles == 9)
             {
-                
+
                 VideoPlanePlayer video910 = video.GetComponent<VideoPlanePlayer>();
                 video910.PlayVideo();
             }
@@ -161,6 +174,9 @@ public class Partie : MonoBehaviour
 
     private void UpdateEtatQuille(int index, bool etat)
     {
+        Debug.LogWarning($"UpdateEtatQuille {index}, {etat}");
+        int size = etatQuilles.Count();
+        Debug.LogWarning($"Taille : {size}");
         etatQuilles[index] = etat;
         Debug.Log($"Quille {index} tombée : {etatQuilles[index]}");
 

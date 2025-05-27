@@ -1272,7 +1272,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1105907166}
   - component: {fileID: 1105907167}
-  - component: {fileID: 1105907167}
   - component: {fileID: 1105907168}
   m_Layer: 0
   m_Name: videoPlayer
@@ -1304,7 +1303,7 @@ VideoPlayer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1105907165}
-  m_Enabled: 1
+  m_Enabled: 0
   m_VideoClip: {fileID: 32900000, guid: b995b13f4eb2efb4b885bed360624b02, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
