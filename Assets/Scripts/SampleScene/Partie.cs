@@ -21,10 +21,15 @@ public class Partie : MonoBehaviour
     private List<bool> etatQuilles = new List<bool>();
 
     private GameObject quilleManager;
+<<<<<<< HEAD
+    private GameObject scoreDisplay;
+=======
     public GameObject video;
+>>>>>>> 8876dbf9aa25c6e507b7fb7f92d234ca86e896ed
 
     void Start()
     {
+        scoreDisplay = GameObject.FindWithTag("ScoreDisplay");
         for (int i = 0; i < 10; i++)
         {
             Jeu jeu = new Jeu
@@ -142,6 +147,11 @@ public class Partie : MonoBehaviour
         {
             Debug.LogWarning("TextMesh non assigné");
         }
+    }
+
+    void ScoreAppear()
+    {
+
     }
 
     void UpdateTextLancer(int indice, int points)
