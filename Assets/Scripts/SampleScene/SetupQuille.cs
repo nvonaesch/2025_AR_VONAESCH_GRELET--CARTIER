@@ -65,7 +65,7 @@ public class setupQuille : MonoBehaviour
         foreach (GameObject q in quilles)
         {
             Quille quille = q.GetComponent<Quille>();
-            if (quillesTombees[quille.numero] == false)
+            if (quillesTombees[quille.numero] == Constantes.DEBOUT)
             {
                 quille.ActiverQuille();
             }
@@ -73,7 +73,7 @@ public class setupQuille : MonoBehaviour
             {
                 quille.DesactiverQuille();
             }
-            quillesTombees[quille.numero] = false;
+            quillesTombees[quille.numero] = Constantes.DEBOUT;
         }
     }
 }

@@ -18,7 +18,7 @@ public class Partie : MonoBehaviour
 
     public List<TextMeshProUGUI> textsLancers = new List<TextMeshProUGUI>();
 
-    private List<bool> quillesTombees = new List<bool>();
+    private List<bool> etatQuilles = new List<bool>();
 
     private GameObject quilleManager;
     public GameObject video;
@@ -29,14 +29,13 @@ public class Partie : MonoBehaviour
         {
             Jeu jeu = new Jeu
             {
-                numero = i,
-                lancer1 = new Lancer(1),
-                lancer2 = new Lancer(2),
+                lancer1 = new Lancer(),
+                lancer2 = new Lancer(),
             };
 
             jeux.Add(jeu);
         }
-        quillesTombees = Enumerable.Repeat(false, 10).ToList();
+        etatQuilles = Enumerable.Repeat(false, 10).ToList();
 
         quilleManager = GameObject.Find("QuilleManager");
     }
@@ -78,15 +77,15 @@ public class Partie : MonoBehaviour
     public void MiseAJourJeu()
     {
         UpdateEtatToutesQuilles();
-        int nbQuilles = quillesTombees.Count(q => q == true);
+        int nbQuilles = etatQuilles.Count(q => q == Constantes.TOMBEE);
         int score = nbQuilles;
 
-        if (finie == false)
+        if (finie != Constantes.FINIE)
         {
             Jeu jeuActuel = jeux[indiceJeu];
             switch (indiceLancer)
             {
-                case false:
+                case Constantes.PREMIER_LANCER:
                     jeuActuel.lancer1.score = score;
                     UpdateTextLancer(indiceJeu * 2, score);
                     if (score == 10)
@@ -95,7 +94,7 @@ public class Partie : MonoBehaviour
                         indiceJeu += 1;
                     }
                     break;
-                case true:
+                case Constantes.SECOND_LANCER:
                     score = nbQuilles - jeuActuel.lancer1.score;
                     UpdateTextLancer(indiceJeu * 2 + 1, score);
                     jeuActuel.lancer2.score = score;
@@ -105,7 +104,7 @@ public class Partie : MonoBehaviour
             indiceLancer = !indiceLancer;
             if (indiceJeu == 10)
             {
-                finie = true;
+                finie = Constantes.FINIE;
             }
 
             UpdateText(score);
@@ -152,8 +151,8 @@ public class Partie : MonoBehaviour
 
     private void UpdateEtatQuille(int index, bool etat)
     {
-        quillesTombees[index] = etat;
-        Debug.Log($"Quille {index} tombée : {quillesTombees[index]}");
+        etatQuilles[index] = etat;
+        Debug.Log($"Quille {index} tombée : {etatQuilles[index]}");
 
     }
 
@@ -175,9 +174,9 @@ public class Partie : MonoBehaviour
 
         if (indiceLancer == false)
         {
-            for (int i = 0; i < 10; i++) { quillesTombees[i] = false; }
+            for (int i = 0; i < 10; i++) { etatQuilles[i] = false; }
         }
 
-        setup.ChangerActivationToutesQuilles(quillesTombees, quilles);
+        setup.ChangerActivationToutesQuilles(etatQuilles, quilles);
     }
 }
