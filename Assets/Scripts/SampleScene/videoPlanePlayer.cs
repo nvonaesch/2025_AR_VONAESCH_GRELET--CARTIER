@@ -1,30 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
+using UnityEngine.UI;
+
 
 public class VideoPlanePlayer : MonoBehaviour
 {
-    public GameObject videoPlane;    
-    public float distanceFromCamera = 2.0f;
-
-    private VideoPlayer videoPlayer;
+    public VideoPlayer videoPlayer;
+    public RawImage rawImage;
 
     void Start()
     {
-        Camera cam = Camera.main;
-        videoPlane.transform.position = cam.transform.position + cam.transform.forward * distanceFromCamera;
-        videoPlane.transform.rotation = Quaternion.LookRotation(-cam.transform.forward);
-
-        videoPlayer = videoPlane.GetComponent<VideoPlayer>();
-        videoPlayer.playOnAwake = false;
+        rawImage.enabled = false; 
         videoPlayer.loopPointReached += OnVideoFinished;
+    }
 
+    public void PlayVideo()
+    {
+        Debug.Log("On est dans le script PlayVideo");
+        rawImage.enabled = true;
         videoPlayer.Play();
+        Debug.Log("Vidéo lancée... en théorie");
     }
 
     void OnVideoFinished(VideoPlayer vp)
     {
-        Destroy(videoPlane);
+        videoPlayer.Stop();   
+        rawImage.enabled = false;
+    }
+
+    public void StopVideo()
+    {
+        videoPlayer.Stop();
+        rawImage.enabled = false;
     }
 }
+
+

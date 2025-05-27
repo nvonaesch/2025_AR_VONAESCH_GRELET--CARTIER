@@ -11,7 +11,6 @@ public class GroundLockManager : MonoBehaviour
     private ARPlaneManager planeManager;
     private ARPlane lowestPlane;
     private bool cleanupActive = false;
-    private float cleanupInterval = 1f;
 
     void Awake()
     {

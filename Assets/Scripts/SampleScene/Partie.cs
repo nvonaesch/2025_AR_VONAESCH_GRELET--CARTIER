@@ -21,7 +21,11 @@ public class Partie : MonoBehaviour
     private List<bool> quillesTombees = new List<bool>();
 
     private GameObject quilleManager;
+<<<<<<< HEAD
     private GameObject scoreDisplay;
+=======
+    public GameObject video;
+>>>>>>> 8876dbf9aa25c6e507b7fb7f92d234ca86e896ed
 
     void Start()
     {
@@ -38,7 +42,7 @@ public class Partie : MonoBehaviour
             jeux.Add(jeu);
         }
         quillesTombees = Enumerable.Repeat(false, 10).ToList();
-        
+
         quilleManager = GameObject.Find("QuilleManager");
     }
 
@@ -80,6 +84,7 @@ public class Partie : MonoBehaviour
     {
         UpdateEtatToutesQuilles();
         int nbQuilles = quillesTombees.Count(q => q == true);
+        int score = nbQuilles;
 
         if (finie == false)
         {
@@ -87,17 +92,18 @@ public class Partie : MonoBehaviour
             switch (indiceLancer)
             {
                 case false:
-                    jeuActuel.lancer1.score = nbQuilles;
-                    UpdateTextLancer(indiceJeu * 2, nbQuilles);
-                    if (nbQuilles == 10)
+                    jeuActuel.lancer1.score = score;
+                    UpdateTextLancer(indiceJeu * 2, score);
+                    if (score == 10)
                     {
                         indiceLancer = !indiceLancer;
                         indiceJeu += 1;
                     }
                     break;
                 case true:
-                    UpdateTextLancer(indiceJeu * 2 + 1, nbQuilles - jeuActuel.lancer1.score);
-                    jeuActuel.lancer2.score = nbQuilles - jeuActuel.lancer1.score;
+                    score = nbQuilles - jeuActuel.lancer1.score;
+                    UpdateTextLancer(indiceJeu * 2 + 1, score);
+                    jeuActuel.lancer2.score = score;
                     indiceJeu += 1;
                     break;
             }
@@ -107,7 +113,13 @@ public class Partie : MonoBehaviour
                 finie = true;
             }
 
-            UpdateText(nbQuilles);
+            UpdateText(score);
+            if (nbQuilles == 9)
+            {
+                
+                VideoPlanePlayer video910 = video.GetComponent<VideoPlanePlayer>();
+                video910.PlayVideo();
+            }
             ReplacerQuilles();
 
         }
