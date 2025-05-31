@@ -17,10 +17,10 @@ public class Quille : MonoBehaviour
         
         if (angle > angleSeuil || deltaY > hauteurSeuil)
         {
-            return true;
+            return Constantes.TOMBEE;
         }
 
-        return false;
+        return Constantes.DEBOUT;
     }
 
     public void DesactiverQuille()
