@@ -21,11 +21,8 @@ public class Partie : MonoBehaviour
     private List<bool> quillesTombees = new List<bool>();
 
     private GameObject quilleManager;
-<<<<<<< HEAD
     private GameObject scoreDisplay;
-=======
     public GameObject video;
->>>>>>> 8876dbf9aa25c6e507b7fb7f92d234ca86e896ed
 
     void Start()
     {
