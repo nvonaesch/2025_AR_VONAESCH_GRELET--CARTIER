@@ -25,11 +25,13 @@ public class setupQuille : MonoBehaviour
         startZ = -totalDepth / 2f;
         float lastRowZ = startZ + (totalRows - 1) * spacing;
 
-        float scoreZ = lastRowZ + 2.0f;  
+        float scoreZ = lastRowZ + 2.0f;
         Vector3 scorePosition = centerPosition + new Vector3(0f, 1f, scoreZ);
 
-        GameObject scoreDisplay = Instantiate(scorePrefab, scorePosition, scoreRotation, reconstructedPlane.transform);
-        scoreDisplay.name = "ScoreDisplay";
+        scorePrefab.transform.SetParent(reconstructedPlane.transform);
+        scorePrefab.transform.position = scorePosition;
+        scorePrefab.transform.rotation = scoreRotation;
+        scorePrefab.name = "ScoreDisplay";
         
         int numQuille = 0;
 

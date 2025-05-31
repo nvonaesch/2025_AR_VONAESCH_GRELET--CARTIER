@@ -11,35 +11,19 @@ public class Partie : MonoBehaviour
     public int indiceJeu = 0;
     public bool finie = false;
 
-    public TextMeshProUGUI textScore;
-    public TextMeshProUGUI textIndiceJeu;
-    public TextMeshProUGUI textIndiceLancer;
-    public TextMeshProUGUI textPointsLancer;
 
     public List<TextMeshProUGUI> textsLancers = new List<TextMeshProUGUI>();
-
+    public List<TextMeshProUGUI> textsScoresCumules = new List<TextMeshProUGUI>();
     private List<bool> etatQuilles = new List<bool>();
 
     private GameObject quilleManager;
-    private GameObject scoreDisplay;
     public GameObject video;
 
-    void Awake()
-    {
-        Debug.LogWarning("AWAKE appelé sur Partie");
-    }
-
-    void OnEnable()
-    {
-        Debug.LogWarning("ON ENABLE appelé sur Partie");
-    }
 
     void Start()
     {
 
-        scoreDisplay = GameObject.FindWithTag("ScoreDisplay");
 
-        Debug.LogWarning("START appelé sur Partie");
         for (int i = 0; i < 10; i++)
         {
             Jeu jeu = new Jeu
@@ -92,6 +76,19 @@ public class Partie : MonoBehaviour
         return scores.Take(nombre).Sum();
     }
 
+    void UpdateScoreCumule()
+    {
+        int scoreTotal = 0;
+        for (int i = 0; i < jeux.Count; i++)
+        {
+            scoreTotal += CalculerScoreJeu(jeux[i], i);
+            if (i < textsScoresCumules.Count && textsScoresCumules[i] != null && string.IsNullOrEmpty(textsScoresCumules[i].text))
+            {
+                textsScoresCumules[i].text = scoreTotal.ToString();
+            }
+        }
+    }
+    
     public void MiseAJourJeu()
     {
         UpdateEtatToutesQuilles();
@@ -120,12 +117,13 @@ public class Partie : MonoBehaviour
                     break;
             }
             indiceLancer = !indiceLancer;
-            if (indiceJeu == 10)
+            if (indiceJeu == 20)
             {
                 finie = Constantes.FINIE;
             }
 
-            UpdateText(score);
+            UpdateScoreCumule();
+
             if (nbQuilles == 9)
             {
 
@@ -145,26 +143,6 @@ public class Partie : MonoBehaviour
             score += CalculerScoreJeu(j, j.numero);
         }
         return score;
-    }
-
-    void UpdateText(int points)
-    {
-        if (textScore != null)
-        {
-            textScore.text = "Score : " + CalculerScorePartie();
-            textIndiceJeu.text = "Jeu numéro " + indiceJeu;
-            textIndiceLancer.text = "Lancer numéro " + (indiceLancer ? "2" : "1");
-            textPointsLancer.text = "Points sur le lancer précédent : " + points;
-        }
-        else
-        {
-            Debug.LogWarning("TextMesh non assigné");
-        }
-    }
-
-    void ScoreAppear()
-    {
-
     }
 
     void UpdateTextLancer(int indice, int points)

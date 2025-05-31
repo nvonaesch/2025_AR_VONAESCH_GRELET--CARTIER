@@ -1,8 +1,8 @@
 [System.Serializable]
 public class Jeu
 {
-    public Lancer lancer1 ;
-    public Lancer lancer2 ;
+    public Lancer lancer1 = null;
+    public Lancer lancer2 = null;
 
     public int pointsSupplementaires = 0;
 
