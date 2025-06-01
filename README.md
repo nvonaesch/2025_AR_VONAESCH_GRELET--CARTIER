@@ -1,11 +1,14 @@
 # AR Bowling
 
+##### Auteurs: GRELET--CARTIER Suzanne & VON AESCH Nicolas
+##### Année universitaire: 2025/2026
+
+
 ## Description
 
 Ce projet est constitué d'une application en réalité augmentée développée en C# avec Unity, dans le cadre du cours Réalité augmentée et interactions hybrides.
 L'objectif de ce projet est de découvrir la technologie de réalité augmentée et de développer des interactions avec celle-ci.
-Nous utiliserons dans le cadre de ce projet cette technologie afin de simuler un Bowling.
-
+Nous utiliserons dans le cadre de ce projet cette technologie afin de simuler un Bowling. 
 ## Build
 ### Prérequis
 
