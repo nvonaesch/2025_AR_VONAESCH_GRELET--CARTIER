@@ -5,26 +5,36 @@ using TMPro;
 
 public class Partie : MonoBehaviour
 {
-    public List<Jeu> jeux = new List<Jeu>();
+    public List<Jeu> jeux1 = new List<Jeu>();
+    public List<Jeu> jeux2 = new List<Jeu>();
 
     public bool indiceLancer = false;
     public int indiceJeu = 0;
     public bool finie = false;
 
+    public bool joueur1 = true;
+
 
     public List<TextMeshProUGUI> textsLancers = new List<TextMeshProUGUI>();
     public List<TextMeshProUGUI> textsScoresCumules = new List<TextMeshProUGUI>();
+    public List<TextMeshProUGUI> textsScoresCumulesJ2 = new List<TextMeshProUGUI>();
+
     private List<bool> etatQuilles = new List<bool>();
 
     private GameObject quilleManager;
     public GameObject video;
+    public GameObject autreJoueur;
 
+    private int indiceJeuCumuleJ1 = 0;
+    private int indiceJeuCumuleJ2 = 0;
+    public TextMeshProUGUI scoreFinalJ1;
+    public TextMeshProUGUI scoreFinalJ2;
 
     void Start()
     {
+        
 
-
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             Jeu jeu = new Jeu
             {
@@ -32,7 +42,15 @@ public class Partie : MonoBehaviour
                 lancer2 = new Lancer(),
             };
 
-            jeux.Add(jeu);
+            jeux1.Add(jeu);
+
+            Jeu jeu2 = new Jeu
+            {
+                lancer1 = new Lancer(),
+                lancer2 = new Lancer(),
+            };
+
+            jeux2.Add(jeu2);
         }
         etatQuilles = Enumerable.Repeat(false, 10).ToList();
 
@@ -62,32 +80,20 @@ public class Partie : MonoBehaviour
     {
         List<int> scores = new List<int>();
 
-        for (int i = startIndex; i < jeux.Count && scores.Count < nombre; i++)
+        for (int i = startIndex; i < jeux1.Count && scores.Count < nombre; i++)
         {
-            var j = jeux[i];
+            var j = jeux1[i];
             if (j.lancer1 != null)
                 scores.Add(j.lancer1.score);
             if (j.lancer2 != null && scores.Count < nombre)
                 scores.Add(j.lancer2.score);
             if (j.strike == true)
-                scores.Add(jeux[i + 1].lancer1.score);
+                scores.Add(jeux1[i + 1].lancer1.score);
         }
 
         return scores.Take(nombre).Sum();
     }
 
-    void UpdateScoreCumule()
-    {
-        int scoreTotal = 0;
-        for (int i = 0; i < jeux.Count; i++)
-        {
-            scoreTotal += CalculerScoreJeu(jeux[i], i);
-            if (i < textsScoresCumules.Count && textsScoresCumules[i] != null && string.IsNullOrEmpty(textsScoresCumules[i].text))
-            {
-                textsScoresCumules[i].text = scoreTotal.ToString();
-            }
-        }
-    }
     
     public void MiseAJourJeu()
     {
@@ -97,7 +103,17 @@ public class Partie : MonoBehaviour
 
         if (finie != Constantes.FINIE)
         {
-            Jeu jeuActuel = jeux[indiceJeu];
+            Jeu jeuActuel;
+            bool tempBool = joueur1;
+            if (joueur1)
+            {
+                jeuActuel = jeux1[indiceJeu];
+            }
+            else
+            {
+                jeuActuel = jeux2[indiceJeu];
+            }
+
             switch (indiceLancer)
             {
                 case Constantes.PREMIER_LANCER:
@@ -107,6 +123,7 @@ public class Partie : MonoBehaviour
                     {
                         indiceLancer = !indiceLancer;
                         indiceJeu += 1;
+                        joueur1 = !joueur1;
                     }
                     break;
                 case Constantes.SECOND_LANCER:
@@ -114,15 +131,31 @@ public class Partie : MonoBehaviour
                     UpdateTextLancer(indiceJeu * 2 + 1, score);
                     jeuActuel.lancer2.score = score;
                     indiceJeu += 1;
+                    joueur1 = !joueur1;
+
                     break;
             }
             indiceLancer = !indiceLancer;
-            if (indiceJeu == 20)
+            if (indiceJeu == 40)
             {
                 finie = Constantes.FINIE;
             }
 
-            UpdateScoreCumule();
+            if (tempBool)
+            {
+                textsScoresCumules[indiceJeuCumuleJ1].text = CalculerScoreJeu(jeuActuel, indiceJeu + 1).ToString();
+                if (indiceLancer == Constantes.PREMIER_LANCER)
+                    indiceJeuCumuleJ1 += 1;
+            }
+            else
+            {
+                textsScoresCumulesJ2[indiceJeuCumuleJ2].text = CalculerScoreJeu(jeuActuel, indiceJeu + 1).ToString();
+                if (indiceLancer == Constantes.PREMIER_LANCER)
+                    indiceJeuCumuleJ2 += 1;
+            }
+
+
+
 
             if (nbQuilles == 9)
             {
@@ -130,15 +163,34 @@ public class Partie : MonoBehaviour
                 VideoPlanePlayer video910 = video.GetComponent<VideoPlanePlayer>();
                 video910.PlayVideo();
             }
-            ReplacerQuilles();
 
+
+            ReplacerQuilles();
+            scoreFinalJ1.text = CalculerScorePartieJ1().ToString();
+            scoreFinalJ2.text = CalculerScorePartieJ2().ToString();
+
+        }
+        else
+        {
+            scoreFinalJ1.text = CalculerScorePartieJ1().ToString();
+            scoreFinalJ2.text = CalculerScorePartieJ2().ToString();
         }
     }
 
-    int CalculerScorePartie()
+    int CalculerScorePartieJ1()
     {
         int score = 0;
-        foreach (Jeu j in jeux)
+        foreach (Jeu j in jeux1)
+        {
+            score += CalculerScoreJeu(j, j.numero);
+        }
+        return score;
+    }
+
+     int CalculerScorePartieJ2()
+    {
+        int score = 0;
+        foreach (Jeu j in jeux2)
         {
             score += CalculerScoreJeu(j, j.numero);
         }
