@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using TMPro;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Partie : MonoBehaviour
 {
@@ -32,7 +34,7 @@ public class Partie : MonoBehaviour
 
     void Start()
     {
-        
+
 
         for (int i = 0; i < 20; i++)
         {
@@ -94,7 +96,7 @@ public class Partie : MonoBehaviour
         return scores.Take(nombre).Sum();
     }
 
-    
+
     public void MiseAJourJeu()
     {
         UpdateEtatToutesQuilles();
@@ -139,6 +141,7 @@ public class Partie : MonoBehaviour
             if (indiceJeu == 40)
             {
                 finie = Constantes.FINIE;
+                StartCoroutine(RetourAuMenu());
             }
 
             if (tempBool)
@@ -174,6 +177,7 @@ public class Partie : MonoBehaviour
         {
             scoreFinalJ1.text = CalculerScorePartieJ1().ToString();
             scoreFinalJ2.text = CalculerScorePartieJ2().ToString();
+            
         }
     }
 
@@ -187,7 +191,7 @@ public class Partie : MonoBehaviour
         return score;
     }
 
-     int CalculerScorePartieJ2()
+    int CalculerScorePartieJ2()
     {
         int score = 0;
         foreach (Jeu j in jeux2)
@@ -234,5 +238,10 @@ public class Partie : MonoBehaviour
         }
 
         setup.ChangerActivationToutesQuilles(etatQuilles, quilles);
+    }
+    private IEnumerator RetourAuMenu()
+    {
+        yield return new WaitForSeconds(5f); 
+        SceneManager.LoadScene("Menu");
     }
 }
